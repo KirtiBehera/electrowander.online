@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coming Soon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+      color: #1a3c6e;
+      text-align: center;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 40px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .social-icons a {
+      margin-left: 15px;
+      text-decoration: none;
+      color: #1a3c6e;
+      font-size: 18px;
+    }
+
+    h1 {
+      font-size: 60px;
+      margin-top: 60px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    p {
+      max-width: 700px;
+      margin: 20px auto;
+      line-height: 1.6;
+      color: #4a6fa5;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 12px 30px;
+      border: 2px solid #1a3c6e;
+      border-radius: 8px;
+      background: transparent;
+      color: #1a3c6e;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #1a3c6e;
+      color: white;
+    }
+
+    /* Illustration area */
+    .illustration {
+      margin-top: 60px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #1a3c6e, #3b82f6);
+      border-radius: 10px;
+      transform: rotate(10deg);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .box:nth-child(2) {
+      animation-delay: 1s;
+    }
+
+    .box:nth-child(3) {
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(10deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(10deg);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    /* Optional video section */
+    .video-container {
+      margin-top: 40px;
+    }
+
+    video {
+      width: 80%;
+      max-width: 700px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <div>ELECTROWANDER</div>
+    <div class="social-icons">
+      <a href="https://www.youtube.com/@electrowander">🌐</a>
+      <a href="https://www.youtube.com/@learngb2tb">🐦</a>
+      <a href="#">📧</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <h1>Coming Soon</h1>
+
+  <p>
+    Tease site visitors about your upcoming website. Let them know what to expect
+    without giving away too much. Add important keywords to boost your visibility.
+  </p>
+
+  <p>
+    Stay tuned for something amazing. We are working hard to launch soon!
+  </p>
+
+  <button class="btn">Learn More</button>
+
+  <!-- Animated Illustration -->
+  <div class="illustration">
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+  </div>
+
+  <!-- Optional Video (Replace src with your file) -->
+  <div class="video-container">
+    <video controls autoplay muted loop>
+      <source src="https://www.youtube.com/embed/Hfm94aHAbYQ?si=ufQZsO2fBs9bHsnG" type="video/mp4">
+      Your browser does not support video.
+    </video>
+  </div>
+
+  <footer>
+    © 2026 Your Website. All rights reserved.
+  </footer>
+
+</body>
+</html>
