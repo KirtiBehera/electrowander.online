@@ -1,21 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electrowander - Projects</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: white;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: rgba(0,0,0,0.3);
+}
+
+/* Projects Section */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.projects {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 250px;
+    background: white;
+    color: #1a3c6e;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    animation: float 3s infinite ease-in-out;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.1);
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Chatbot */
+.chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 24px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.chatbox {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    color: black;
+    border-radius: 15px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.chat-header {
+    background: #3b82f6;
+    color: white;
+    padding: 10px;
+}
+
+.chat-body {
+    padding: 10px;
+    height: 200px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+
+.chat-input {
+    display: flex;
+    border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+}
+
+.chat-input button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div><b>ELECTROWANDER</b></div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Videos</a>
+        <a href="#">Services</a>
+        <a href="#">Portfolio</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
+
 <section class="hero">
     <h1>Recent Projects</h1>
-    <div style="margin: 20px auto; width: 250px; height: 150px; border: 2px solid #3b82f6; border-radius: 15px; background: white; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); animation: cardFloat 3s infinite ease-in-out;">
-        <h4 style="color: #1a3c6e;">LearnGB2TB</h4>
-        <p style="font-size: 12px;">Educational AI Platform</p>
+
+    <div class="projects">
+
+        <div class="card">
+            <h3>LearnGB2TB</h3>
+            <p>Educational AI Platform</p>
+        </div>
+
+        <div class="card">
+            <h3>Smart Home</h3>
+            <p>IoT Automation using ESP8266</p>
+        </div>
+
+        <div class="card">
+            <h3>HEXAI</h3>
+            <p>Exchange Admin AI Assistant</p>
+        </div>
+
     </div>
-    </head>
-<body>
-    <header>
-        <div>ELECTROWANDER</div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="youtube.html">Videos</a>
-            <a href="services.html">Services</a>
-            <a href="portfolio.html">Portfolio</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
-    <style>@keyframes cardFloat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }</style>
 </section>
+
+<!-- Chatbot -->
+<div class="chatbot-btn" onclick="toggleChat()">💬</div>
+
+<div class="chatbox" id="chatbox">
+    <div class="chat-header">HEXAI Assistant</div>
+    <div class="chat-body" id="chatBody">
+        <p><b>HEXAI:</b> Hello! How can I help you?</p>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Type a message...">
+        <button onclick="sendMsg()">Send</button>
+    </div>
+</div>
+
+<script>
+function toggleChat() {
+    let chat = document.getElementById("chatbox");
+    chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+}
+
+function sendMsg() {
+    let input = document.getElementById("userInput");
+    let msg = input.value;
+    if(msg === "") return;
+
+    let chatBody = document.getElementById("chatBody");
+
+    chatBody.innerHTML += "<p><b>You:</b> " + msg + "</p>";
+
+    let reply = "I can help with projects, automation, or web design!";
+
+    setTimeout(() => {
+        chatBody.innerHTML += "<p><b>HEXAI:</b> " + reply + "</p>";
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }, 500);
+
+    input.value = "";
+}
+</script>
+
+</body>
+</html>
