@@ -1,207 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectroWander | Official Channels</title>
-    <style>
-        :root {
-            --yt-red: #ff0000;
-            --yt-black: #0f0f0f;
-            --yt-white: #ffffff;
-            --yt-grey: #aaaaaa;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElectroWander | Official Channels</title>
 
-        body {
-            background-color: var(--yt-black);
-            color: var(--yt-white);
-            font-family: "Roboto", Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+<style>
+:root {
+    --yt-red: #ff0000;
+    --yt-black: #0f0f0f;
+    --yt-white: #ffffff;
+    --yt-grey: #aaaaaa;
+}
 
-        /* --- Animated YouTube Logo --- */
-        .logo-container {
-            margin-bottom: 50px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
+body {
+    background-color: var(--yt-black);
+    color: var(--yt-white);
+    font-family: "Roboto", Arial, sans-serif;
+    margin: 0;
+    text-align: center;
+}
 
-        .logo-container:hover {
-            transform: scale(1.1);
-        }
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: #111;
+}
 
-        .yt-logo {
-            width: 120px;
-            height: 84px;
-            background-color: var(--yt-red);
-            border-radius: 25px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: pulse 2s infinite ease-in-out;
-        }
+nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
 
-        /* The Play Triangle */
-        .yt-logo::after {
-            content: "";
-            display: block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 20px 0 20px 35px;
-            border-color: transparent transparent transparent var(--yt-white);
-            margin-left: 5px;
-        }
+nav a:hover {
+    color: var(--yt-red);
+}
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
-            70% { box-shadow: 0 0 0 30px rgba(255, 0, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
-        }
+/* LOGO */
+.logo-container {
+    margin: 40px 0;
+}
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            letter-spacing: -1px;
-        }
+.yt-logo {
+    width: 120px;
+    height: 84px;
+    background: var(--yt-red);
+    border-radius: 25px;
+    margin: auto;
+    position: relative;
+    animation: pulse 2s infinite;
+}
 
-        /* --- Channel Cards --- */
-        .channel-grid {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
-        }
+.yt-logo::after {
+    content: "";
+    position: absolute;
+    top: 22px;
+    left: 45px;
+    border-style: solid;
+    border-width: 20px 0 20px 35px;
+    border-color: transparent transparent transparent white;
+}
 
-        .card {
-            background: #1e1e1e;
-            width: 320px;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: 0.3s;
-            border: 1px solid #333;
-            text-decoration: none;
-            color: inherit;
-        }
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.7);}
+    70% { box-shadow: 0 0 0 30px rgba(255,0,0,0);}
+    100% { box-shadow: 0 0 0 0 rgba(255,0,0,0);}
+}
 
-        .card:hover {
-            background: #2a2a2a;
-            transform: translateY(-10px);
-            border-color: var(--yt-red);
-        }
+/* CHANNEL CARDS */
+.channel-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
 
-        .banner {
-            height: 100px;
-            background: linear-gradient(45deg, #2c3e50, #ff0000);
-        }
+.card {
+    background: #1e1e1e;
+    width: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    transition: 0.4s;
+    animation: fadeUp 1s ease;
+}
 
-        .content {
-            padding: 20px;
-            text-align: center;
-        }
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    border: 1px solid var(--yt-red);
+}
 
-        .avatar {
-            width: 80px;
-            height: 80px;
-            background: #444;
-            border-radius: 50%;
-            margin: -60px auto 15px;
-            border: 4px solid #1e1e1e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 24px;
-            color: var(--yt-white);
-        }
+.banner {
+    height: 100px;
+    background: linear-gradient(45deg, #2c3e50, red);
+}
 
-        .channel-name {
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+.content {
+    padding: 20px;
+}
 
-        .handle {
-            color: var(--yt-grey);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: -60px auto 10px;
+    background: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .sub-button {
-            background-color: var(--yt-white);
-            color: var(--yt-black);
-            padding: 10px 24px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: inline-block;
-            transition: 0.2s;
-        }
+.sub-button {
+    background: white;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin-top: 10px;
+}
 
-        .card:hover .sub-button {
-            background-color: var(--yt-red);
-            color: var(--yt-white);
-        }
+.card:hover .sub-button {
+    background: red;
+    color: white;
+}
 
-        footer {
-            margin-top: 60px;
-            color: var(--yt-grey);
-            font-size: 0.8rem;
-        }
-    </style>
+/* WALKING CHARACTER */
+.character {
+    position: fixed;
+    bottom: 20px;
+    left: -100px;
+    font-size: 40px;
+    animation: walk 12s linear infinite;
+}
+
+@keyframes walk {
+    0% { left: -100px; }
+    100% { left: 110%; }
+}
+
+/* SPEECH BUBBLE */
+.speech {
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    background: white;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    animation: fadeIn 2s ease;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+@keyframes fadeIn {
+    from { opacity: 0;}
+    to { opacity: 1;}
+}
+
+footer {
+    margin-top: 50px;
+    color: gray;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="logo-container">
-        <div class="yt-logo"></div>
-    </div>
+<header>
+    <div><b>ELECTROWANDER</b></div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Videos</a>
+        <a href="#">Services</a>
+        <a href="#">Portfolio</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
 
-    <h1>Choose Your Channel</h1>
+<div class="logo-container">
+    <div class="yt-logo"></div>
+</div>
 
-    <div class="channel-grid">
-        <a href="https://www.youtube.com/@electrowander" class="card" target="_blank">
-            <div class="banner"></div>
-            <div class="content">
-                <div class="avatar" style="background: #ff4500;">EW</div>
-                <div class="channel-name">ElectroWander</div>
-                <div class="handle">@electrowander</div>
-                <div class="sub-button">Subscribe</div>
-            </div>
-        </a>
-</head>
-<body>
-    <header>
-        <div>ELECTROWANDER</div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="youtube.html">Videos</a>
-            <a href="services.html">Services</a>
-            <a href="portfolio.html">Portfolio</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
-        <a href="https://www.youtube.com/@learngb2tb" class="card" target="_blank">
-            <div class="banner" style="background: linear-gradient(45deg, #00c6ff, #0072ff);"></div>
-            <div class="content">
-                <div class="avatar" style="background: #0072ff;">LT</div>
-                <div class="channel-name">LearnGB2TB</div>
-                <div class="handle">@learngb2tb</div>
-                <div class="sub-button">Subscribe</div>
-            </div>
-        </a>
-    </div>
+<h1>Choose Your Channel</h1>
 
-    <footer>
-        &copy; 2026 ElectroWander Media. All Rights Reserved.
-    </footer>
+<div class="channel-grid">
+
+    <a href="https://www.youtube.com/@electrowander" target="_blank" class="card">
+        <div class="banner"></div>
+        <div class="content">
+            <div class="avatar">EW</div>
+            <h3>ElectroWander</h3>
+            <p>@electrowander</p>
+            <div class="sub-button">Subscribe</div>
+        </div>
+    </a>
+
+    <a href="https://www.youtube.com/@learngb2tb" target="_blank" class="card">
+        <div class="banner" style="background:linear-gradient(45deg,#00c6ff,#0072ff);"></div>
+        <div class="content">
+            <div class="avatar">LT</div>
+            <h3>LearnGB2TB</h3>
+            <p>@learngb2tb</p>
+            <div class="sub-button">Subscribe</div>
+        </div>
+    </a>
+
+</div>
+
+<!-- Character -->
+<div class="character">🚶‍♂️</div>
+
+<!-- Speech -->
+<div class="speech">👆 Click a channel to explore amazing content!</div>
+
+<footer>
+    © 2026 ElectroWander Media
+</footer>
 
 </body>
 </html>
