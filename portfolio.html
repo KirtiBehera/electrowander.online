@@ -9,7 +9,7 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    background: linear-gradient(to right, #0f2027, #2c5364);
     color: white;
 }
 
@@ -18,40 +18,66 @@ header {
     display: flex;
     justify-content: space-between;
     padding: 20px 40px;
-    background: rgba(0,0,0,0.3);
+    background: linear-gradient(to right, #0f2027, #203a43);
 }
 
-/* Projects Section */
+header div {
+    font-weight: bold;
+}
+
+nav a {
+    color: #cbd5e1;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #38bdf8;
+}
+
+/* Section */
 .hero {
     text-align: center;
-    padding: 60px 20px;
+    padding: 80px 20px;
 }
 
+.hero h1 {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+/* Cards */
 .projects {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 40px;
     flex-wrap: wrap;
 }
 
 .card {
-    width: 250px;
-    background: white;
+    width: 280px;
+    background: rgba(255,255,255,0.9);
     color: #1a3c6e;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    animation: float 3s infinite ease-in-out;
-    transition: 0.3s;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    transition: 0.4s;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 14px;
+    color: #334155;
 }
 
 .card:hover {
-    transform: scale(1.1);
-}
-
-@keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
 /* Chatbot */
@@ -124,14 +150,14 @@ header {
 <body>
 
 <header>
-    <div><b>ELECTROWANDER</b></div>
+    <div>ELECTROWANDER</div>
     <nav>
         <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="youtube.html">Videos</a>
-            <a href="services.html">Services</a>
-            <a href="portfolio.html">Portfolio</a>
-            <a href="contact.html">Contact</a>
+        <a href="about.html">About</a>
+        <a href="youtube.html">Videos</a>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="contact.html">Contact</a>
     </nav>
 </header>
 
