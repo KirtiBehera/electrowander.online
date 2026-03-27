@@ -19,42 +19,42 @@
                 id: 2,
                 title: 'Quantum Cloud',
                 description: 'Next-generation cloud infrastructure leveraging quantum computing for unprecedented processing power.',
-                image: 'images/quantum-cloud.jpg',
+                image: 'quantum-cloud.jpg',
                 tech: ['AWS', 'Kubernetes', 'Docker']
             },
             {
                 id: 3,
                 title: 'Blockchain Vault',
                 description: 'Secure decentralized storage solution using advanced encryption and distributed ledger technology.',
-                image: 'images/blockchain-vault.jpg',
+                image: 'blockchain-vault.jpg',
                 tech: ['Ethereum', 'Solidity', 'Web3']
             },
             {
                 id: 4,
                 title: 'Cyber Defense',
                 description: 'Military-grade cybersecurity framework with real-time threat detection and automated response.',
-                image: 'images/cyber-defense.jpg',
+                image: 'cyber-defense.jpg',
                 tech: ['Zero Trust', 'AI Defense', 'Encryption']
             },
             {
                 id: 5,
                 title: 'Data Nexus',
                 description: 'Big data processing platform capable of analyzing petabytes of information in real-time.',
-                image: 'images/data-nexus.jpg',
+                image: 'data-nexus.jpg',
                 tech: ['Apache Spark', 'Hadoop', 'Kafka']
             },
             {
                 id: 6,
                 title: 'AR Interface',
                 description: 'Augmented reality system for immersive data visualization and interactive experiences.',
-                image: 'images/ar-interface.jpg',
+                image: 'ar-interface.jpg',
                 tech: ['Unity', 'ARCore', 'Computer Vision']
             },
             {
                 id: 7,
                 title: 'IoT Matrix',
                 description: 'Intelligent IoT ecosystem connecting millions of devices with edge computing capabilities.',
-                image: 'images/iot-matrix.jpg',
+                image: 'iot-matrix.jpg',
                 tech: ['MQTT', 'Edge AI', '5G']
             }
         ];
