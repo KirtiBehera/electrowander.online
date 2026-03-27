@@ -12,7 +12,7 @@
                 id: 1,
                 title: 'Neural Network',
                 description: 'Advanced AI system with deep learning capabilities for predictive analytics and pattern recognition.',
-                image: 'images/neural-network.jpg',
+                image: 'neural-network.jpg',
                 tech: ['TensorFlow', 'Python', 'CUDA']
             },
             {
