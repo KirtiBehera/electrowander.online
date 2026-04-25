@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELECTROWANDER — Smart Innovation Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060a12;
+    --bg2: #0b1120;
+    --accent: #00e5c8;
+    --accent2: #0af0d0;
+    --text: #e8eaf0;
+    --muted: #7a8499;
+    --border: rgba(0,229,200,0.12);
+    --glow: rgba(0,229,200,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  #cursor {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.12s ease;
+    opacity: 0.6;
+  }
+  body:hover #cursor { opacity: 1; }
+
+  /* NAVBAR */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px;
+    background: linear-gradient(to bottom, rgba(6,10,18,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(0px);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--text);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-center {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-center:hover { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: var(--text);
+    text-decoration: none;
+    text-transform: uppercase;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* SOCIAL SIDEBAR */
+  .social-sidebar {
+    position: fixed;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .social-sidebar a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+    background: rgba(0,229,200,0.03);
+  }
+  .social-sidebar a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,229,200,0.08);
+    transform: translateX(3px);
+  }
+  .social-sidebar svg { width: 14px; height: 14px; fill: currentColor; }
+
+  /* HERO SECTION */
+  #hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Animated circuit background */
+  .circuit-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .circuit-bg canvas {
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .orb-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0,229,200,0.15) 0%, transparent 70%);
+    top: -100px;
+    left: -100px;
+    animation: orbFloat1 8s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0,180,255,0.1) 0%, transparent 70%);
+    bottom: -50px;
+    right: -50px;
+    animation: orbFloat2 10s ease-in-out infinite;
+  }
+
+  @keyframes orbFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, 20px) scale(1.05); }
+  }
+  @keyframes orbFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-20px, -30px) scale(1.08); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 100px;
+    pointer-events: none;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hero-hello {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeSlideLeft 0.8s 1.2s ease forwards;
+  }
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(42px, 5.5vw, 80px);
+    line-height: 0.95;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0;
+    animation: fadeSlideLeft 0.8s 1.4s ease forwards;
+  }
+  .hero-name-2 {
+    animation-delay: 1.5s;
+  }
+
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
+  }
+  .hero-role-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeSlideRight 0.8s 1.6s ease forwards;
+  }
+  .hero-role {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 4.8vw, 72px);
+    line-height: 0.95;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeSlideRight 0.8s 1.8s ease forwards;
+  }
+  .hero-role .flip-word {
+    display: inline-block;
+    color: var(--accent);
+    animation: flipWords 5s 3s infinite;
+  }
+  .hero-role .static-word {
+    color: var(--text);
+  }
+
+  @keyframes flipWords {
+    0%,40% { transform: translateY(0%); opacity: 1; }
+    50%,90% { transform: translateY(-110%); opacity: 0; }
+    91% { transform: translateY(110%); opacity: 0; }
+    100% { transform: translateY(0%); opacity: 1; }
+  }
+
+  /* 3D Robot / Avatar in center */
+  .hero-center {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    animation: riseUp 1.2s 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+
+  @keyframes riseUp {
+    0% { opacity: 0; transform: translateX(-50%) translateY(60px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0px); }
+  }
+
+  .robot-svg-wrap {
+    width: clamp(220px, 28vw, 400px);
+    filter: drop-shadow(0 0 40px rgba(0,229,200,0.3)) drop-shadow(0 30px 60px rgba(0,0,0,0.7));
+    animation: robotHover 4s ease-in-out infinite;
+  }
+
+  @keyframes robotHover {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .robot-base-glow {
+    width: 200px;
+    height: 40px;
+    background: radial-gradient(ellipse, rgba(0,229,200,0.5) 0%, transparent 70%);
+    border-radius: 50%;
+    margin-top: -20px;
+    filter: blur(15px);
+    animation: baseGlowPulse 4s ease-in-out infinite;
+  }
+
+  @keyframes baseGlowPulse {
+    0%,100% { opacity: 0.6; transform: scaleX(1); }
+    50% { opacity: 1; transform: scaleX(1.15); }
+  }
+
+  .resume-btn {
+    position: absolute;
+    bottom: 40px;
+    right: 48px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    border-radius: 2px;
+    transition: all 0.3s;
+    z-index: 20;
+    cursor: none;
+  }
+  .resume-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(0,229,200,0.05);
+  }
+
+  @keyframes fadeSlideLeft {
+    0% { opacity: 0; transform: translateX(-30px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeSlideRight {
+    0% { opacity: 0; transform: translateX(30px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  /* LOADING SCREEN */
+  #loader {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    transition: opacity 0.6s, visibility 0.6s;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .loader-logo span { color: var(--accent); }
+  .loader-bar-wrap {
+    width: 200px;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .loader-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    animation: loadBar 1.4s cubic-bezier(0.4,0,0.2,1) forwards;
+    box-shadow: 0 0 10px var(--accent);
+  }
+  @keyframes loadBar {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
+  .loader-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* SECTIONS */
+  section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 120px 100px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 4.5vw, 64px);
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 0.95;
+    color: var(--text);
+  }
+
+  /* ABOUT */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-text p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: rgba(232,234,240,0.75);
+    margin-top: 32px;
+    font-weight: 300;
+  }
+  .about-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .pillar-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 32px;
+    background: rgba(0,229,200,0.02);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .pillar-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s;
+  }
+  .pillar-card:hover { border-color: rgba(0,229,200,0.3); transform: translateX(6px); }
+  .pillar-card:hover::before { transform: scaleY(1); }
+  .pillar-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  .pillar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .pillar-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* SERVICES / WHAT WE DO */
+  #services {
+    padding-top: 80px;
+  }
+  .services-header { margin-bottom: 60px; }
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .service-card {
+    padding: 48px 40px;
+    background: rgba(0,229,200,0.015);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: background 0.4s;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,229,200,0.07) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .service-card:hover { background: rgba(0,229,200,0.04); }
+  .service-card:hover::after { opacity: 1; }
+  .service-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+  }
+  .service-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .service-sub {
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .service-desc {
+    font-size: 15px;
+    color: rgba(232,234,240,0.65);
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(0,229,200,0.25);
+    padding: 5px 12px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(0,229,200,0.04);
+  }
+  .service-arrow {
+    position: absolute;
+    bottom: 32px;
+    right: 32px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 16px;
+    transition: all 0.3s;
+  }
+  .service-card:hover .service-arrow {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  /* YOUTUBE / WORK */
+  #work {
+    padding-top: 80px;
+  }
+  .work-header { margin-bottom: 60px; }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .work-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--bg2);
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: none;
+  }
+  .work-card:hover { transform: translateY(-6px); border-color: rgba(0,229,200,0.3); }
+  .work-thumb {
+    aspect-ratio: 16/9;
+    background: #0d1525;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .work-thumb-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .work-play {
+    width: 50px;
+    height: 50px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 18px;
+    z-index: 2;
+    position: relative;
+    transition: all 0.3s;
+    background: rgba(0,229,200,0.06);
+  }
+  .work-card:hover .work-play {
+    background: rgba(0,229,200,0.15);
+    transform: scale(1.1);
+  }
+  .work-info { padding: 20px; }
+  .work-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .work-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* CONTACT */
+  #contact {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    margin-top: 60px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .contact-col {
+    padding: 40px;
+    border-right: 1px solid var(--border);
+  }
+  .contact-col:last-child { border-right: none; }
+  .contact-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .contact-col p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+  .contact-col a {
+    display: block;
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .contact-col a:hover { color: var(--accent); }
+  .contact-col a svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+  .contact-branding {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text);
+    line-height: 1.3;
+    margin-top: 8px;
+  }
+  .contact-branding span { color: var(--accent); }
+  .contact-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-top: 16px;
+  }
+
+  /* CIRCUIT ANIMATION */
+  .circuit-line {
+    position: absolute;
+    background: var(--accent);
+    opacity: 0.15;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+    opacity: 0;
+    animation: fadeIn 1s 2.5s ease forwards;
+  }
+  .scroll-hint span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .scroll-mouse {
+    width: 20px;
+    height: 32px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 5px;
+  }
+  .scroll-dot {
+    width: 3px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 2px;
+    animation: scrollDot 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollDot {
+    0% { transform: translateY(0); opacity: 1; }
+    60% { transform: translateY(8px); opacity: 0.3; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    background: rgba(0,229,200,0.02);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 60px;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .marquee-item::after {
+    content: '⚡';
+    font-size: 12px;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 80px;
+  }
+  .stat-item {
+    background: var(--bg2);
+    padding: 32px 28px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 24px; }
+    section { padding: 80px 24px; }
+    .hero-content { padding: 0 60px; }
+    #about { grid-template-columns: 1fr; gap: 48px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .work-grid { grid-template-columns: 1fr 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .contact-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .contact-col:last-child { border-bottom: none; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .social-sidebar { display: none; }
+    .nav-center { display: none; }
+    .nav-links { gap: 24px; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    section { padding: 60px 20px; }
+    .hero-content { padding: 0 20px; flex-direction: column; align-items: flex-start; gap: 24px; }
+    .hero-right { text-align: left; }
+    .hero-center { display: none; }
+    .work-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .resume-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Loading screen -->
+<div id="loader">
+  <div class="loader-logo">ELECTRO<span>WANDER</span></div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-text">INITIALIZING SYSTEMS...</div>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#" class="nav-logo">EW<span>.</span></a>
+  <a href="https://electrowander.online" class="nav-center" target="_blank" rel="noreferrer">electrowander.online</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">YouTube</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Social sidebar -->
+<div class="social-sidebar">
+  <a href="https://www.youtube.com/@electrowander" target="_blank" rel="noreferrer" title="YouTube">
+    <svg viewBox="0 0 24 24"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.5 2.8 12 2.8 12 2.8s-4.5 0-6.8.2c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.6 12 21.7 12 21.7s4.5 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg>
+  </a>
+  <a href="https://electrowander.online" target="_blank" rel="noreferrer" title="Website">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor"/></svg>
+  </a>
+  <a href="mailto:hello@electrowander.online" title="Email">
+    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" fill="none" stroke="currentColor"/><polyline points="22,6 12,13 2,6" fill="none" stroke="currentColor"/></svg>
+  </a>
+</div>
+
+<!-- Hero Section -->
+<section id="hero" style="padding:0; max-width:100vw;">
+  <div class="circuit-bg">
+    <canvas id="circuitCanvas"></canvas>
+  </div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-hello">Hello! We are</div>
+      <div class="hero-name">ELECTRO</div>
+      <div class="hero-name hero-name-2">WANDER</div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-role-label">Smart Innovation</div>
+      <div class="hero-role">
+        <div class="flip-word">INNOVATION</div>
+      </div>
+      <div class="hero-role">
+        <span class="static-word">STUDIO</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Robot / 3D avatar SVG -->
+  <div class="hero-center">
+    <div class="robot-svg-wrap">
+      <!-- Stylized Robot SVG representing electronics/tech -->
+      <svg viewBox="0 0 300 480" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <defs>
+          <radialGradient id="bodyGrad" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#1a2d40"/>
+            <stop offset="100%" stop-color="#0a1320"/>
+          </radialGradient>
+          <radialGradient id="headGrad" cx="40%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#1e3048"/>
+            <stop offset="100%" stop-color="#0c1926"/>
+          </radialGradient>
+          <radialGradient id="eyeGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#00ffe5"/>
+            <stop offset="100%" stop-color="#00b89e"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="softGlow">
+            <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Neck -->
+        <rect x="128" y="170" width="44" height="30" rx="6" fill="url(#bodyGrad)" stroke="#00e5c8" stroke-width="0.8" opacity="0.8"/>
+        <line x1="145" y1="172" x2="145" y2="198" stroke="#00e5c8" stroke-width="0.5" opacity="0.4"/>
+        <line x1="155" y1="172" x2="155" y2="198" stroke="#00e5c8" stroke-width="0.5" opacity="0.4"/>
+
+        <!-- Body -->
+        <rect x="70" y="198" width="160" height="140" rx="18" fill="url(#bodyGrad)" stroke="#1e3a4a" stroke-width="1.5"/>
+        <!-- body detail lines -->
+        <rect x="88" y="218" width="124" height="4" rx="2" fill="#00e5c8" opacity="0.15"/>
+        <rect x="88" y="228" width="80" height="2" rx="1" fill="#00e5c8" opacity="0.08"/>
+
+        <!-- chest panel -->
+        <rect x="100" y="230" width="100" height="70" rx="8" fill="rgba(0,229,200,0.05)" stroke="#00e5c8" stroke-width="0.8" opacity="0.5"/>
+        <!-- chest lights -->
+        <circle cx="120" cy="255" r="6" fill="#00e5c8" filter="url(#glow)" opacity="0.9">
+          <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="150" cy="255" r="6" fill="#00aaff" filter="url(#glow)" opacity="0.7">
+          <animate attributeName="opacity" values="0.7;0.3;0.7" dur="2.4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="180" cy="255" r="6" fill="#00e5c8" filter="url(#glow)" opacity="0.9">
+          <animate attributeName="opacity" values="0.9;0.5;0.9" dur="1.8s" repeatCount="indefinite"/>
+        </circle>
+        <!-- chest bar -->
+        <rect x="108" y="278" width="84" height="3" rx="1.5" fill="#00e5c8" opacity="0.3"/>
+        <rect x="108" y="278" width="50" height="3" rx="1.5" fill="#00e5c8" opacity="0.7">
+          <animate attributeName="width" values="20;84;20" dur="3s" repeatCount="indefinite"/>
+        </rect>
+
+        <!-- Left arm -->
+        <rect x="28" y="205" width="42" height="110" rx="14" fill="url(#bodyGrad)" stroke="#1e3a4a" stroke-width="1.5"/>
+        <rect x="36" y="228" width="26" height="2" rx="1" fill="#00e5c8" opacity="0.3"/>
+        <rect x="36" y="234" width="18" height="2" rx="1" fill="#00e5c8" opacity="0.2"/>
+        <!-- left hand -->
+        <rect x="28" y="308" width="42" height="26" rx="8" fill="#0d1f30" stroke="#1e3a4a" stroke-width="1"/>
+
+        <!-- Right arm -->
+        <rect x="230" y="205" width="42" height="110" rx="14" fill="url(#bodyGrad)" stroke="#1e3a4a" stroke-width="1.5"/>
+        <rect x="238" y="228" width="26" height="2" rx="1" fill="#00e5c8" opacity="0.3"/>
+        <rect x="238" y="234" width="18" height="2" rx="1" fill="#00e5c8" opacity="0.2"/>
+        <!-- right hand -->
+        <rect x="230" y="308" width="42" height="26" rx="8" fill="#0d1f30" stroke="#1e3a4a" stroke-width="1"/>
+
+        <!-- Shoulder joints -->
+        <circle cx="70" cy="215" r="12" fill="#0f1e2e" stroke="#00e5c8" stroke-width="1" opacity="0.8"/>
+        <circle cx="70" cy="215" r="5" fill="#00e5c8" opacity="0.5"/>
+        <circle cx="230" cy="215" r="12" fill="#0f1e2e" stroke="#00e5c8" stroke-width="1" opacity="0.8"/>
+        <circle cx="230" cy="215" r="5" fill="#00e5c8" opacity="0.5"/>
+
+        <!-- Legs -->
+        <rect x="100" y="334" width="42" height="90" rx="14" fill="url(#bodyGrad)" stroke="#1e3a4a" stroke-width="1.5"/>
+        <rect x="158" y="334" width="42" height="90" rx="14" fill="url(#bodyGrad)" stroke="#1e3a4a" stroke-width="1.5"/>
+        <!-- knee joints -->
+        <rect x="100" y="388" width="42" height="14" rx="4" fill="#0d1f30" stroke="#00e5c8" stroke-width="0.6" opacity="0.6"/>
+        <rect x="158" y="388" width="42" height="14" rx="4" fill="#0d1f30" stroke="#00e5c8" stroke-width="0.6" opacity="0.6"/>
+        <!-- feet -->
+        <rect x="96" y="420" width="50" height="22" rx="8" fill="#0a1825" stroke="#1e3a4a" stroke-width="1.5"/>
+        <rect x="154" y="420" width="50" height="22" rx="8" fill="#0a1825" stroke="#1e3a4a" stroke-width="1.5"/>
+
+        <!-- Hip connector -->
+        <rect x="100" y="330" width="100" height="12" rx="4" fill="#0a1825" stroke="#00e5c8" stroke-width="0.8" opacity="0.5"/>
+
+        <!-- HEAD -->
+        <rect x="88" y="62" width="124" height="112" rx="24" fill="url(#headGrad)" stroke="#1e3a4a" stroke-width="1.5"/>
+
+        <!-- Antenna -->
+        <rect x="147" y="26" width="6" height="40" rx="3" fill="#0f1e2e" stroke="#00e5c8" stroke-width="0.8"/>
+        <circle cx="150" cy="22" r="9" fill="#0a1825" stroke="#00e5c8" stroke-width="1.2"/>
+        <circle cx="150" cy="22" r="5" fill="#00e5c8" filter="url(#softGlow)" opacity="0.9">
+          <animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="r" values="5;6;5" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Ear sensors -->
+        <rect x="75" y="95" width="16" height="40" rx="6" fill="#0d1f30" stroke="#00e5c8" stroke-width="0.8" opacity="0.8"/>
+        <rect x="209" y="95" width="16" height="40" rx="6" fill="#0d1f30" stroke="#00e5c8" stroke-width="0.8" opacity="0.8"/>
+        <line x1="83" y1="105" x2="83" y2="125" stroke="#00e5c8" stroke-width="1" opacity="0.5"/>
+        <line x1="217" y1="105" x2="217" y2="125" stroke="#00e5c8" stroke-width="1" opacity="0.5"/>
+
+        <!-- Eyes -->
+        <!-- left eye socket -->
+        <rect x="104" y="92" width="40" height="28" rx="10" fill="#070e18"/>
+        <!-- right eye socket -->
+        <rect x="156" y="92" width="40" height="28" rx="10" fill="#070e18"/>
+
+        <!-- left eye glow -->
+        <rect x="106" y="94" width="36" height="24" rx="8" fill="url(#eyeGrad)" opacity="0.9" filter="url(#glow)">
+          <animate attributeName="opacity" values="0.9;0.6;0.9" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <!-- right eye glow -->
+        <rect x="158" y="94" width="36" height="24" rx="8" fill="url(#eyeGrad)" opacity="0.9" filter="url(#glow)">
+          <animate attributeName="opacity" values="0.9;0.6;0.9" dur="3s" repeatCount="indefinite"/>
+        </rect>
+
+        <!-- eye pupils -->
+        <circle cx="124" cy="106" r="6" fill="#001a16"/>
+        <circle cx="176" cy="106" r="6" fill="#001a16"/>
+        <circle cx="126" cy="104" r="2" fill="white" opacity="0.5"/>
+        <circle cx="178" cy="104" r="2" fill="white" opacity="0.5"/>
+
+        <!-- eye scan lines -->
+        <line x1="108" y1="106" x2="140" y2="106" stroke="#00e5c8" stroke-width="0.5" opacity="0.4"/>
+        <line x1="160" y1="106" x2="192" y2="106" stroke="#00e5c8" stroke-width="0.5" opacity="0.4"/>
+
+        <!-- Mouth / speaker grille -->
+        <rect x="112" y="138" width="76" height="20" rx="6" fill="#070e18" stroke="#00e5c8" stroke-width="0.6" opacity="0.8"/>
+        <line x1="120" y1="148" x2="132" y2="148" stroke="#00e5c8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+        <line x1="138" y1="148" x2="162" y2="148" stroke="#00e5c8" stroke-width="1.5" stroke-linecap="round" opacity="0.6">
+          <animate attributeName="x2" values="162;148;162" dur="0.8s" repeatCount="indefinite"/>
+        </line>
+        <line x1="168" y1="148" x2="180" y2="148" stroke="#00e5c8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+
+        <!-- head top detail -->
+        <rect x="118" y="66" width="64" height="3" rx="1.5" fill="#00e5c8" opacity="0.12"/>
+
+        <!-- circuit trace on body -->
+        <path d="M 88 305 L 88 330 L 108 330" stroke="#00e5c8" stroke-width="0.6" opacity="0.25" fill="none"/>
+        <path d="M 212 305 L 212 330 L 192 330" stroke="#00e5c8" stroke-width="0.6" opacity="0.25" fill="none"/>
+      </svg>
+    </div>
+    <div class="robot-base-glow"></div>
+  </div>
+
+  <a href="#" class="resume-btn">View Portfolio ↗</a>
+
+  <div class="scroll-hint">
+    <div class="scroll-mouse"><div class="scroll-dot"></div></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item">Electronics</div>
+    <div class="marquee-item">Automation</div>
+    <div class="marquee-item">Innovation</div>
+    <div class="marquee-item">Smart Systems</div>
+    <div class="marquee-item">IoT</div>
+    <div class="marquee-item">Embedded Systems</div>
+    <div class="marquee-item">PCB Design</div>
+    <div class="marquee-item">Arduino</div>
+    <div class="marquee-item">Raspberry Pi</div>
+    <div class="marquee-item">Electronics</div>
+    <div class="marquee-item">Automation</div>
+    <div class="marquee-item">Innovation</div>
+    <div class="marquee-item">Smart Systems</div>
+    <div class="marquee-item">IoT</div>
+    <div class="marquee-item">Embedded Systems</div>
+    <div class="marquee-item">PCB Design</div>
+    <div class="marquee-item">Arduino</div>
+    <div class="marquee-item">Raspberry Pi</div>
+  </div>
+</div>
+
+<!-- About Section -->
+<section id="about">
+  <div class="about-text">
+    <div class="section-label">About Us</div>
+    <h2 class="section-title">Imaginary<br>Ideas Into<br>Reality</h2>
+    <p>At ELECTROWANDER, we transform ideas into intelligent systems by blending electronics, automation, and innovation. From concept to circuit, we build smart solutions that move the world forward — meticulous in every component, relentless in every iteration.</p>
+  </div>
+  <div class="about-pillars">
+    <div class="pillar-card">
+      <div class="pillar-icon">💎</div>
+      <div class="pillar-title">Innovation</div>
+      <div class="pillar-desc">Pioneering the future through smart electronics and cutting-edge automation systems that redefine what's possible.</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">🔬</div>
+      <div class="pillar-title">Precision</div>
+      <div class="pillar-desc">Meticulous attention to detail in every circuit, every component, every design decision — engineering at its finest.</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">∞</div>
+      <div class="pillar-title">Evolution</div>
+      <div class="pillar-desc">Continuous adaptation and learning, always staying ahead of tomorrow's challenges with agile, forward-thinking solutions.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Row -->
+<div style="max-width:1400px; margin: 0 auto; padding: 0 100px;">
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">Projects Built</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">10K+</div>
+      <div class="stat-label">Community Members</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100+</div>
+      <div class="stat-label">Video Tutorials</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">5+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+  </div>
+</div>
+
+<!-- Services Section -->
+<section id="services">
+  <div class="services-header">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Our<br>Services</h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01 —</div>
+      <div class="service-title">Electronics Design</div>
+      <div class="service-sub">Circuit to PCB</div>
+      <div class="service-desc">End-to-end electronics design — from schematic capture through PCB layout to functional prototype. We design circuits that are reliable, efficient, and production-ready.</div>
+      <div class="service-tags">
+        <span class="tag">Schematic Design</span>
+        <span class="tag">PCB Layout</span>
+        <span class="tag">Prototyping</span>
+        <span class="tag">Signal Analysis</span>
+        <span class="tag">Power Systems</span>
+      </div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02 —</div>
+      <div class="service-title">Automation Systems</div>
+      <div class="service-sub">Smart & Connected</div>
+      <div class="service-desc">Industrial and home automation solutions powered by microcontrollers and intelligent logic. We make machines smarter, processes leaner, and systems self-sufficient.</div>
+      <div class="service-tags">
+        <span class="tag">Arduino</span>
+        <span class="tag">Raspberry Pi</span>
+        <span class="tag">PLCs</span>
+        <span class="tag">SCADA</span>
+        <span class="tag">IoT Sensors</span>
+      </div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03 —</div>
+      <div class="service-title">Embedded Systems</div>
+      <div class="service-sub">Firmware & Software</div>
+      <div class="service-desc">Firmware development and embedded software that breathes life into hardware. From bare-metal C to RTOS — we write code that runs fast, stable, and lean.</div>
+      <div class="service-tags">
+        <span class="tag">C / C++</span>
+        <span class="tag">Python</span>
+        <span class="tag">RTOS</span>
+        <span class="tag">BLE / WiFi</span>
+        <span class="tag">UART / SPI / I2C</span>
+      </div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04 —</div>
+      <div class="service-title">Education & Content</div>
+      <div class="service-sub">Learn & Build</div>
+      <div class="service-desc">High-quality tutorials, workshops, and educational content on electronics and automation. We empower the next generation of makers, engineers, and innovators.</div>
+      <div class="service-tags">
+        <span class="tag">YouTube Tutorials</span>
+        <span class="tag">Workshops</span>
+        <span class="tag">Project Guides</span>
+        <span class="tag">Courses</span>
+        <span class="tag">Community</span>
+      </div>
+      <div class="service-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- Work / YouTube Section -->
+<section id="work">
+  <div class="work-header">
+    <div class="section-label">YouTube</div>
+    <h2 class="section-title">Featured<br>Projects</h2>
+  </div>
+  <div class="work-grid">
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg" style="background: linear-gradient(135deg, #0a1e2e 0%, #0d2a1a 100%);">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.2">
+            <circle cx="40" cy="40" r="35" stroke="#00e5c8" stroke-width="1"/>
+            <path d="M20 40 L60 40 M40 20 L40 60" stroke="#00e5c8" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" stroke="#00e5c8" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="work-play">▶</div>
+      </div>
+      <div class="work-info">
+        <div class="work-title">Arduino Smart Home Automation System</div>
+        <div class="work-meta">Electronics · IoT · Automation</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg" style="background: linear-gradient(135deg, #0a1a2e 0%, #0a2020 100%);">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.2">
+            <rect x="15" y="25" width="50" height="35" rx="4" stroke="#00e5c8" stroke-width="1"/>
+            <line x1="25" y1="35" x2="55" y2="35" stroke="#00e5c8" stroke-width="0.8"/>
+            <line x1="25" y1="42" x2="45" y2="42" stroke="#00e5c8" stroke-width="0.8"/>
+            <line x1="25" y1="49" x2="50" y2="49" stroke="#00e5c8" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="work-play">▶</div>
+      </div>
+      <div class="work-info">
+        <div class="work-title">PCB Design from Scratch — Complete Guide</div>
+        <div class="work-meta">PCB Design · KiCad · Hardware</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg" style="background: linear-gradient(135deg, #0a2214 0%, #0f1a28 100%);">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.2">
+            <polygon points="40,15 60,55 20,55" stroke="#00e5c8" stroke-width="1" fill="none"/>
+            <circle cx="40" cy="45" r="5" stroke="#00e5c8" stroke-width="1"/>
+            <line x1="40" y1="25" x2="40" y2="38" stroke="#00e5c8" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="work-play">▶</div>
+      </div>
+      <div class="work-info">
+        <div class="work-title">Raspberry Pi IoT Sensor Network Build</div>
+        <div class="work-meta">Raspberry Pi · Python · IoT</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg" style="background: linear-gradient(135deg, #1a1a0a 0%, #0a1a30 100%);">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.2">
+            <circle cx="40" cy="40" r="20" stroke="#00e5c8" stroke-width="1"/>
+            <path d="M 30 40 Q 35 30 40 40 Q 45 50 50 40" stroke="#00e5c8" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+        <div class="work-play">▶</div>
+      </div>
+      <div class="work-info">
+        <div class="work-title">SCADA System with Python & Modbus</div>
+        <div class="work-meta">SCADA · Industrial · Python</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg" style="background: linear-gradient(135deg, #0a2a1a 0%, #0a1820 100%);">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.2">
+            <rect x="20" y="30" width="18" height="24" rx="3" stroke="#00e5c8" stroke-width="1"/>
+            <rect x="42" y="20" width="18" height="34" rx="3" stroke="#00e5c8" stroke-width="1"/>
+            <line x1="20" y1="62" x2="62" y2="62" stroke="#00e5c8" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="work-play">▶</div>
+      </div>
+      <div class="work-info">
+        <div class="work-title">Motor Control with PWM & H-Bridge</div>
+        <div class="work-meta">Power Electronics · Firmware · Control</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg" style="background: linear-gradient(135deg, #0e0a28 0%, #0a2020 100%);">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.2">
+            <circle cx="40" cy="40" r="25" stroke="#00e5c8" stroke-width="0.8" stroke-dasharray="4 3"/>
+            <circle cx="40" cy="40" r="12" stroke="#00e5c8" stroke-width="1"/>
+            <circle cx="40" cy="40" r="4" fill="#00e5c8" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="work-play">▶</div>
+      </div>
+      <div class="work-info">
+        <div class="work-title">BLE Smart Device with ESP32</div>
+        <div class="work-meta">ESP32 · Bluetooth · Wireless</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2 class="section-title">Contact</h2>
+  <div class="contact-grid">
+    <div class="contact-col">
+      <h4>Connect</h4>
+      <a href="https://electrowander.online" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        electrowander.online
+      </a>
+      <a href="mailto:hello@electrowander.online">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        hello@electrowander.online
+      </a>
+      <h4 style="margin-top: 24px;">Focus Areas</h4>
+      <p>Electronics Engineering · Automation · IoT · Embedded Systems · Education</p>
+    </div>
+    <div class="contact-col">
+      <h4>Platforms</h4>
+      <a href="https://www.youtube.com/@electrowander" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+        YouTube — @electrowander
+      </a>
+      <a href="https://electrowander.online/about.html" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        About — Our Story
+      </a>
+      <a href="https://electrowander.online/services.html" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Services — What We Offer
+      </a>
+    </div>
+    <div class="contact-col">
+      <h4>Studio</h4>
+      <div class="contact-branding">Designed &<br>Built by<br><span>Electrowander</span></div>
+      <div class="contact-year">© 2026 — All Rights Reserved</div>
+      <div style="margin-top:20px;">
+        <div class="tag" style="display:inline-flex;">Learn GB2TB Team</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  // Hover effects on links/buttons
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '6px';
+      cursor.style.height = '6px';
+      ring.style.width = '52px';
+      ring.style.height = '52px';
+      ring.style.borderColor = 'var(--accent)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px';
+      cursor.style.height = '10px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+      ring.style.borderColor = 'var(--accent)';
+    });
+  });
+
+  // Loader
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1600);
+
+  // Circuit canvas
+  const canvas = document.getElementById('circuitCanvas');
+  const ctx = canvas.getContext('2d');
+  let lines = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function createLine() {
+    const startX = Math.random() * canvas.width;
+    const startY = Math.random() * canvas.height;
+    const horizontal = Math.random() > 0.5;
+    const length = 40 + Math.random() * 160;
+    const speed = 0.5 + Math.random() * 1.5;
+    return {
+      x: startX, y: startY,
+      horizontal,
+      length,
+      progress: 0,
+      speed,
+      opacity: 0.3 + Math.random() * 0.4,
+      hasDot: Math.random() > 0.5,
+      dotX: null, dotY: null
+    };
+  }
+
+  for (let i = 0; i < 30; i++) lines.push(createLine());
+
+  function drawCircuit() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    lines.forEach((line, i) => {
+      line.progress += line.speed;
+      if (line.progress > line.length + 40) {
+        lines[i] = createLine();
+        return;
+      }
+      const endProgress = Math.min(line.progress, line.length);
+      ctx.beginPath();
+      ctx.strokeStyle = `rgba(0, 229, 200, ${line.opacity})`;
+      ctx.lineWidth = 0.8;
+      if (line.horizontal) {
+        ctx.moveTo(line.x, line.y);
+        ctx.lineTo(line.x + endProgress, line.y);
+        if (line.hasDot && endProgress >= line.length * 0.8) {
+          ctx.fillStyle = `rgba(0, 229, 200, ${line.opacity * 1.5})`;
+          ctx.beginPath();
+          ctx.arc(line.x + line.length, line.y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else {
+        ctx.moveTo(line.x, line.y);
+        ctx.lineTo(line.x, line.y + endProgress);
+        if (line.hasDot && endProgress >= line.length * 0.8) {
+          ctx.fillStyle = `rgba(0, 229, 200, ${line.opacity * 1.5})`;
+          ctx.beginPath();
+          ctx.arc(line.x, line.y + line.length, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.stroke();
+    });
+    requestAnimationFrame(drawCircuit);
+  }
+  drawCircuit();
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.pillar-card, .service-card, .work-card, .stat-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
